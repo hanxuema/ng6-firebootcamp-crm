@@ -7,7 +7,7 @@ import { tap, catchError } from "rxjs/operators";
 // this is a code that can be injected to other components
 // CompanyService is included in the dependency injection
 @Injectable({
-  providedIn: 'root' // new to ng6
+  providedIn: "root" // new to ng6
 })
 export class CompanyService {
   API_BASE = "http://firebootcamp-crm-api.azurewebsites.net/api";
@@ -15,19 +15,19 @@ export class CompanyService {
   constructor(private httpClient: HttpClient) {}
 
   getCompanies(): Observable<Company[]> {
-    return this.httpClient.get<Company[]>(`${this.API_BASE}/company`)
-    .pipe(
-        tap( x => console.log("Tap", x)),
-        catchError(e=> this.errorHandler<Company[]>(e))
+    return this.httpClient.get<Company[]>(`${this.API_BASE}/company`).pipe(
+      tap(x => console.log("Tap", x)),
+      catchError(e => this.errorHandler<Company[]>(e))
     );
   }
 
-  deleteCompany(id: number): Observable<Company> {
-    return this.httpClient.delete<Company>(`${this.API_BASE}/compay/${id}`)
-    .pipe(catchError(e=>this.errorHandler<Company>(e)));
+  deleteCompany(company: Company): Observable<Company> {
+    return this.httpClient
+      .delete<Company>(`${this.API_BASE}/company/${company.id}`)
+      .pipe(catchError(e => this.errorHandler<Company>(e)));
   }
 
-  errorHandler<T>(error: Error): Observable<T>{
+  errorHandler<T>(error: Error): Observable<T> {
     console.error("ERROR CAUGHT IN SERVICE", error);
     throw error;
   }

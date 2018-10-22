@@ -21,6 +21,10 @@ export class CompanyListComponent implements OnInit {
 
   ngOnInit() {
     // best place to setup things
+    this.loadCompanies();
+  }
+
+  loadCompanies() {
     this.companies$ = this.companyService
       .getCompanies()
       .pipe(
@@ -29,12 +33,13 @@ export class CompanyListComponent implements OnInit {
           finalize(() => console.log("Finalize"))
         )
       );
-    // .subscribe(
-    //   data => {
-    //     this.companies = data;
-    //   },
-    //   error => console.error(error),
-    //   () => console.log("Observable complete")
-    // );
+  }
+
+  deleteCompany(company: Company) {
+    this.companyService.deleteCompany(company).subscribe(next => {
+      // MUST HAVE SUBSCRIBER, OTHERWISE DELETE COMPANY NOT FIRE
+      this.loadCompanies();
+      console.log("delete" + next);
+    });
   }
 }
