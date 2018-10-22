@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Company } from "../company";
 import { CompanyService } from "../company.service";
-import { pipe } from "rxjs";
-import { tap } from "rxjs/operators";
+import { pipe, Subscription, Observable } from "rxjs";
+import { tap, finalize } from "rxjs/operators";
 
 @Component({
   selector: "fbc-company-list",
@@ -12,12 +12,7 @@ import { tap } from "rxjs/operators";
 
 // , OnAfterViewInit another module
 export class CompanyListComponent implements OnInit {
-  companies: Company[];
-
-  // companyService: CompanyService;
-  // constructor(companyService: CompanyService) {
-  //   this.companyService = companyService;
-  // }
+  companies$: Observable<Company[]>;
 
   // same as 3 lines above, just a nice shortcut
   constructor(private companyService: CompanyService) {
@@ -26,16 +21,17 @@ export class CompanyListComponent implements OnInit {
 
   ngOnInit() {
     // best place to setup things
-    this.companyService.getCompanies()
-    .pipe(
-      tap(x=>console.log('Tap in component', x))
-    )
-    .subscribe(
-      data => {
-        this.companies = data;
-      },
-      error => console.error(error),
-      () => console.log('Observable complete')
-    );
+    this.companies$ = this.companyService
+      .getCompanies()
+      .pipe(
+        tap(x => console.log('Tap in component', x),
+        finalize(()=> console.log('Finalize'))));
+    // .subscribe(
+    //   data => {
+    //     this.companies = data;
+    //   },
+    //   error => console.error(error),
+    //   () => console.log("Observable complete")
+    // );
   }
 }
