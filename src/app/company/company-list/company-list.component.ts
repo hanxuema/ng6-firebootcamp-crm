@@ -24,8 +24,11 @@ export class CompanyListComponent implements OnInit {
     this.companies$ = this.companyService
       .getCompanies()
       .pipe(
-        tap(x => console.log('Tap in component', x),
-        finalize(()=> console.log('Finalize'))));
+        tap(
+          x => console.log("Tap in component", x),
+          finalize(() => console.log("Finalize"))
+        )
+      );
     // .subscribe(
     //   data => {
     //     this.companies = data;

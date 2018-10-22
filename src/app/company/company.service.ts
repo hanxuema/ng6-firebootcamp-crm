@@ -18,19 +18,17 @@ export class CompanyService {
     return this.httpClient.get<Company[]>(`${this.API_BASE}/company`)
     .pipe(
         tap( x => console.log("Tap", x)),
-        catchError(this.errorHandler)
+        catchError(e=> this.errorHandler<Company[]>(e))
     );
-
-
-    // return [
-    //   { name: 'company1', phone: 12132, email: 'xie@jasldf.com' },
-    //   { name: 'company2', phone: 121, email: 'xie@hgjgf.com' },
-    //   { name: 'company3', phone: 121677632, email: 'xie@yuyu.com' },
-    // ];
   }
-  errorHandler(error: Error): Observable<Company[]>{
+
+  deleteCompany(id: number): Observable<Company> {
+    return this.httpClient.delete<Company>(`${this.API_BASE}/compay/${id}`)
+    .pipe(catchError(e=>this.errorHandler<Company>(e)));
+  }
+
+  errorHandler<T>(error: Error): Observable<T>{
     console.error("ERROR CAUGHT IN SERVICE", error);
-    //throw error;
-    return new Observable<Company[]>();
+    throw error;
   }
 }
