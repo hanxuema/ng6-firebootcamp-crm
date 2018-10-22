@@ -23,7 +23,7 @@ export class CompanyTableComponent implements OnInit {
 
   constructor() {}
 
-  deleteCompany(company: Company) {
+  deleteCompanyInChildComponent(company: Company) {
     // this.deleteClicked.next(company);
     // emit is the same as next
     this.deleteClicked.emit(company);

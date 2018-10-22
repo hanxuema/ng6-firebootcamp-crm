@@ -1,5 +1,6 @@
 <h1>Companies
-  <button class="btn btn-success float-right">Add</button>
+  <button class="btn btn-success float-right" (click)="logSomething('abc')">Add</button>
 </h1>
 
-<fbc-company-table [companies]="companies$ | async" (deleteClicked)="deleteCompany($event)" ></fbc-company-table>
+<fbc-company-table [companies]="companies$ | async"
+(deleteClicked)="deleteCompanyInParentComponent($event)" (click)="logSomething('abc')" ></fbc-company-table>

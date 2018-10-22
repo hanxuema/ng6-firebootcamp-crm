@@ -35,11 +35,15 @@ export class CompanyListComponent implements OnInit {
       );
   }
 
-  deleteCompany(company: Company) {
+  deleteCompanyInParentComponent(company: Company) {
     this.companyService.deleteCompany(company).subscribe(next => {
       // MUST HAVE SUBSCRIBER, OTHERWISE DELETE COMPANY NOT FIRE
       this.loadCompanies();
       console.log("delete" + next);
     });
+  }
+
+  logSomething(text: string){
+    console.log(text);
   }
 }
