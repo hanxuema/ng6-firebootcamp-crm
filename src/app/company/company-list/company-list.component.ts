@@ -1,26 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { Company } from '../company';
+import { Component, OnInit } from "@angular/core";
+import { Company } from "../company";
+import { CompanyService } from "../company.service";
 
 @Component({
-  selector: 'fbc-company-list',
-  templateUrl: './company-list.component.html',
-  styleUrls: ['./company-list.component.scss']
+  selector: "fbc-company-list",
+  templateUrl: "./company-list.component.html",
+  styleUrls: ["./company-list.component.scss"]
 })
-export class CompanyListComponent implements OnInit {
 
+// , OnAfterViewInit another module
+export class CompanyListComponent implements OnInit {
   companies: Company[];
 
-  constructor() { }
+  // companyService: CompanyService;
+  // constructor(companyService: CompanyService) {
+  //   this.companyService = companyService;
+  // }
 
-  ngOnInit() {
-    this.companies = this.getCompanies();
+  // same as 3 lines above, just a nice shortcut
+  constructor(private companyService: CompanyService) {
+    // fire first and then ngOnInit
   }
 
-  getCompanies(): Company[] {
-    return [
-      { name: 'company1', phone: 12132, email: 'xiey@jasldf.com' },
-      { name: 'company2', phone: 121, email: 'xiey@hgjgf.com' },
-      { name: 'company3', phone: 121677632, email: 'xiey@yuyu.com' },
-    ];
+  ngOnInit() {
+    // best place to setup things
+    this.companies = this.companyService.getCompanies();
   }
 }
