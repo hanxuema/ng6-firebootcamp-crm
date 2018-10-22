@@ -7,7 +7,7 @@ import { tap, catchError } from "rxjs/operators";
 // this is a code that can be injected to other components
 // CompanyService is included in the dependency injection
 @Injectable({
-  providedIn: "root" // new to ng6
+  providedIn: "root" // new to ng6, this means this provider is in root module
 })
 export class CompanyService {
   API_BASE = "http://firebootcamp-crm-api.azurewebsites.net/api";
@@ -22,6 +22,7 @@ export class CompanyService {
   }
 
   deleteCompany(company: Company): Observable<Company> {
+
     return this.httpClient
       .delete<Company>(`${this.API_BASE}/company/${company.id}`)
       .pipe(catchError(e => this.errorHandler<Company>(e)));

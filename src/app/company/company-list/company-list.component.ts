@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
-import { Company } from "../company";
-import { CompanyService } from "../company.service";
-import { pipe, Subscription, Observable } from "rxjs";
-import { tap, finalize } from "rxjs/operators";
+import { Component, OnInit } from '@angular/core';
+import { Company } from '../company';
+import { CompanyService } from '../company.service';
+import { pipe, Subscription, Observable } from 'rxjs';
+import { tap, finalize } from 'rxjs/operators';
 
 @Component({
-  selector: "fbc-company-list",
-  templateUrl: "./company-list.component.html",
-  styleUrls: ["./company-list.component.scss"]
+  selector: 'fbc-company-list',
+  templateUrl: './company-list.component.html',
+  styleUrls: ['./company-list.component.scss']
 })
 
 // , OnAfterViewInit another module
@@ -29,8 +29,8 @@ export class CompanyListComponent implements OnInit {
       .getCompanies()
       .pipe(
         tap(
-          x => console.log("Tap in component", x),
-          finalize(() => console.log("Finalize"))
+          x => console.log('Tap in component', x),
+          finalize(() => console.log('Finalize'))
         )
       );
   }
@@ -39,11 +39,11 @@ export class CompanyListComponent implements OnInit {
     this.companyService.deleteCompany(company).subscribe(next => {
       // MUST HAVE SUBSCRIBER, OTHERWISE DELETE COMPANY NOT FIRE
       this.loadCompanies();
-      console.log("delete" + next);
+      console.log('delete' + next);
     });
   }
 
-  logSomething(text: string){
+  logSomething(text: string) {
     console.log(text);
   }
 }
