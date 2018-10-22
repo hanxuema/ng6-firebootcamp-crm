@@ -8,13 +8,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
   //
   title = 'firebootcamp-crm';
-
-  //event
   keyPressed(event) {
     this.title = event.target.value;
 
   }
 }
 
-//selector is the name of the component
 
