@@ -2,4 +2,4 @@
   <button class="btn btn-success float-right">Add</button>
 </h1>
 
-<fbc-company-table [companies]="companies$ | async"></fbc-company-table>
+<fbc-company-table [companies]="companies$ | async" (deleteClicked)="deleteCompany($event)" ></fbc-company-table>
