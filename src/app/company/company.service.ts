@@ -3,14 +3,14 @@ import { Company } from "./company";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, observable, BehaviorSubject } from "rxjs";
 import { tap, catchError } from "rxjs/operators";
-
+import { environment } from "../../environments/environment";
 // this is a code that can be injected to other components
 // CompanyService is included in the dependency injection
 @Injectable({
   providedIn: "root" // new to ng6, this means this provider is in root module
 })
 export class CompanyService {
-  API_BASE = "http://firebootcamp-crm-api.azurewebsites.net/api";
+  API_BASE = environment.API_BASE; //"http://firebootcamp-crm-api.azurewebsites.net/api";
 
   constructor(private httpClient: HttpClient) {
     this.loadCompanies(); //anyone who call the service,
