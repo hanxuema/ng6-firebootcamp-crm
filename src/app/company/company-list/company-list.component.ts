@@ -21,7 +21,7 @@ export class CompanyListComponent implements OnInit {
 
   ngOnInit() {
     // best place to setup things
-    this.loadCompanies();
+    this.companies$ = this.companyService.getCompanies();
   }
 
   loadCompanies() {
@@ -36,11 +36,12 @@ export class CompanyListComponent implements OnInit {
   }
 
   deleteCompanyInParentComponent(company: Company) {
-    this.companyService.deleteCompany(company).subscribe(next => {
-      // MUST HeAVE SUBSCRIBER, OTHERWISE DELETE COMPANY NOT FIRE
-      this.loadCompanies();
-      console.log("delete" + next);
-    });
+    this.companyService.deleteCompany(company);
+    // (next => {
+    //   // MUST HeAVE SUBSCRIBER, OTHERWISE DELETE COMPANY NOT FIRE
+    //   this.loadCompanies();
+    //   console.log("delete" + next);
+    // });
 
     // this.companyService.getCompanies().subscribe(data => {
     //   for (let index = 0; index < data.length; index++) {
@@ -51,7 +52,6 @@ export class CompanyListComponent implements OnInit {
     //     });
     //   }
     // });
-
   }
 
   logSomething(text: string) {
