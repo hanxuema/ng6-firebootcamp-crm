@@ -1,35 +1,41 @@
-import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
+import { TestBed, async } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { AppComponent } from "./app.component";
+import { of } from "rxjs";
+import { CompanyService } from "./company/company.service";
 
-describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
+describe("AppComponent", () => {
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+  let companySvc;
+  let component : AppComponent;
+
+  beforeEach(() => {
+    companySvc = {
+      getCompanies: () => of([{
+        id:1,
+        name: 'Fake Company',
+        email : 'fakeEmail@ssw.com.au',
+        phone: 12345,
+      }]),
+      API_BASE:''
+    };
+    component = new AppComponent(companySvc);
   });
 
-  it(`should have as title 'firebootcamp-crm'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('firebootcamp-crm');
+  it("should return 2", () => {
+    expect(1 + 1).toEqual(2);
   });
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to firebootcamp-crm!');
+  it("title should be firebootcamp-crm", () => {
+
+    const component = new AppComponent(companySvc);
+    expect(component.title).toEqual("firebootcamp-crm");
+  });
+
+  it(`companyCount = 1`, () => {
+    component.ngOnInit();
+    component.companyCount$.subscribe(c => {
+      expect(c).toEqual(1);
+    });
   });
 });
