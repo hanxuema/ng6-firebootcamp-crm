@@ -38,10 +38,7 @@ export class CompanyEditComponent implements OnInit {
   saveCompany() {
     console.log(this.companyForm);
     if (!this.isNewCompany) {
-      const updateCompany: Company = {
-        ...this.companyForm.value,
-        id: this.companyId
-      };
+      const updateCompany: Company = {...this.companyForm.value,id: this.companyId};
       this.companyService.updateCompany(updateCompany);
     } else {
       this.companyService.addCompany(this.companyForm.value);
