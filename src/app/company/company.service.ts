@@ -10,6 +10,7 @@ import { tap, catchError } from "rxjs/operators";
   providedIn: "root" // new to ng6, this means this provider is in root module
 })
 export class CompanyService {
+
   API_BASE = "http://firebootcamp-crm-api.azurewebsites.net/api";
 
   constructor(private httpClient: HttpClient) {}
@@ -22,8 +23,17 @@ export class CompanyService {
   }
 
   deleteCompany(company: Company): Observable<Company> {
+
     return this.httpClient
       .delete<Company>(`${this.API_BASE}/company/${company.id}`)
+      .pipe(catchError(e => this.errorHandler<Company>(e)));
+  }
+
+  updateCompany(company: Company): Observable<Company> {
+    return this.httpClient
+      .put<Company>(`${this.API_BASE}/company/$(company.id)`, company, {
+        headers: new HttpHeaders().set("content-type", "application/json")
+      })
       .pipe(catchError(e => this.errorHandler<Company>(e)));
   }
 
@@ -33,6 +43,10 @@ export class CompanyService {
         headers: new HttpHeaders().set("content-type", "application/json")
       })
       .pipe(catchError(e => this.errorHandler<Company>(e)));
+  }
+
+  getCompany(id: number) : Observable<Company>{
+    return this.httpClient.get<Company>(`${this.API_BASE}/company/${id}`);
   }
 
   errorHandler<T>(error: Error): Observable<T> {

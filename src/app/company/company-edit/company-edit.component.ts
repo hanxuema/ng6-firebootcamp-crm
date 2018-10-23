@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { CompanyService } from "../company.service";
+import { Company } from "../company";
 
 @Component({
   selector: "fbc-company-edit",
@@ -28,21 +29,31 @@ export class CompanyEditComponent implements OnInit {
     this.buildForm();
     if (!this.isNewCompany) {
       // get company detail
+      this.companyService
+        .getCompany(this.companyId)
+        .subscribe(data => this.companyForm.patchValue(data));
     }
-
   }
 
-  saveCompany(){
+  saveCompany() {
     console.log(this.companyForm);
-    this.companyService.addCompany(this.companyForm.value)
-    .subscribe(() => this.router.navigate(['/company/list']));
+    if (!this.isNewCompany) {
+      const updateCompany: Company = {...this.companyForm.value,id: this.companyId};
+      this.companyService
+        .updateCompany(updateCompany)
+        .subscribe(() => this.router.navigate(["/company/list"]));
+    } else {
+      this.companyService
+        .addCompany(this.companyForm.value)
+        .subscribe(() => this.router.navigate(["/company/list"]));
+    }
   }
 
   buildForm() {
     this.companyForm = this.formBuilder.group({
       name: ["", Validators.required],
       phone: [""],
-      email: ['']
+      email: [""]
     });
   }
 }
