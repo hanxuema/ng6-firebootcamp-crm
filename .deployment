@@ -1,0 +1,160 @@
+Thiago Passos
+HOME
+ABOUT
+SPEAKING
+VIDEOS
+CV
+10 SEPTEMBER 2017
+/
+AZURE
+Build and Deploy an Angular App from GitHub to Azure Website
+I had a bit of a challenge when I tried to deploy an Angular app to Azure and I'd love to share it since it was new to me, it might as well help other people. I used the Angular Cli to create my app and all I wanted was to deploy the final dist folder, but I really didn't want to plug some CI tool to it, as it was something so simple.
+
+WARNING: This post was originally created for Angular 4 apps. Although, I did make some changes and added an extra section at the bottom with the changes I made to the application so it works for Angular 6 apps.
+
+If you prefer watching a video with the steps, here it is
+
+
+First thing I tried was simply configuring continuous deployment in Azure to pick up my GitHub repository and hoped that Azure would be smart enough to recognize it as an Angular app and it would just work. Yeah! I wasn't lucky enough. I started getting some weird 404s and 401s.
+
+After some digging, I found out about kuduscript. So here we go.
+
+You can find the whole source code described in this post here
+
+Pre-requisites
+Node.js
+Angular Cli
+npm install @angular/cli -g
+Kuduscript
+npm install kuduscript -g
+Creating New App
+ng new myApp
+cd myApp
+ng serve
+Your app should be running on port 4200 now.
+
+Generating Kuduscript
+kuduscript -y --node
+This will generate .deployment containing the command to run your deployment script and deploy.cmd which is the deployment script itself.
+
+Updating deployment script
+Now let's open the deploy.cmd script and look for the deployment section so we can update it. Here we'll make sure all the npm packages are installed, build the angular app and copy the content of the dist folder to the deployment target folder (wwwroot).
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Deployment
+:: ----------
+
+:Deployment
+echo Handling node.js deployment.
+
+:: 1. Select node version
+call :SelectNodeVersion
+
+:: 2. Install npm packages
+IF EXIST "%DEPLOYMENT_SOURCE%\package.json" (
+  pushd "%DEPLOYMENT_SOURCE%"
+  call :ExecuteCmd !NPM_CMD! install --production
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
+:: 3. Angular Prod Build
+IF EXIST "%DEPLOYMENT_SOURCE%/.angular.json" (
+echo Building App in %DEPLOYMENT_SOURCE%…
+pushd "%DEPLOYMENT_SOURCE%"
+call :ExecuteCmd !NPM_CMD! run build
+:: If the above command fails comment above and uncomment below one
+:: call ./node_modules/.bin/ng build –prod
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+)
+
+:: 4. KuduSync
+IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
+  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%/dist" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
+  IF !ERRORLEVEL! NEQ 0 goto error
+)
+Update Dependencies
+Couple more things you need to update, this time in your package.json. Under dependencies, add @angular/cli and @angular/compile-cli, in my case it looks like this:
+
+"@angular/cli": "1.5.0",
+"@angular/compiler-cli": "^5.0.0"
+IIS Configuration
+This part is not quite mandatory, but highly recommended if you're hosting on IIS which will most likely be the case when hosting in Azure. We have to add some URL rewrite rules so IIS doesn't freak out with our Angular routes. So I'm gonna add a web.config file into my src folder to do this trick
+
+<?xml version="1.0"?>
+
+<configuration>
+    <system.webServer>
+        <staticContent>
+            <mimeMap fileExtension=".json" mimeType="application/json" />
+            <mimeMap fileExtension=".woff" mimeType="application/x-font-woff" />
+            <mimeMap fileExtension=".woff2" mimeType="font/woff2" />
+        </staticContent>
+    </system.webServer>
+    <system.webServer>
+    <rewrite>
+        <rules>
+            <rule name="angular cli routes" stopProcessing="true">
+                <match url=".*" />
+                <conditions logicalGrouping="MatchAll">
+                    <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                    <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+                </conditions>
+                <action type="Rewrite" url="/" />
+            </rule>
+        </rules>
+    </rewrite>
+  </system.webServer>
+</configuration>
+And the next thing to do so we have our brand new web.config applied is to the update the .angular-cli.json and add web.config to our list of assets:
+
+"assets": [
+  "assets",
+  "favicon.ico",
+  "web.config"
+],
+Now it's only happy days, push all your changes to your GitHub repository. Create your Azure Web App if you haven't done so and configure continuous deployment to point to your GitHub repository.
+
+UPDATE: Here are the changes I made to make it work with Angular 6 apps
+Followed Jason Taylor's post on upgrading to Angular 6
+Update node version for the Website. I had the version 6.9.1 and it wasn't working. So I updated to 8.9.4, to do so, you have to go to Application Settings and update the app settings WEBSITE_NODE_DEFAULT_VERSION.UpdateNodeVersion
+Update step #3 in the deploy.cmd file to point to angular.json instead of .angular-cli.json.
+And here's my Angular 6 app running on Azure
+Hope it helped.
+
+Cheers.
+
+Buy me a coffee
+Buy me a coffee
+ Thiago Passos
+Thiago Passos
+I'm Thiago Passos, a Solution Architect working for SSW sharing what I've been working with and learning. Love technology, dancing and I get unfriendly when I'm hungry.
+
+Read More
+
+— Thiago Passos —
+Azure
+Getting Started: EF Core + Cosmos Db
+Azure Functions for the Enterprise + Setting up CI/CD Pipelines
+Azure Functions for the Enterprise - Exposing Endpoints through Functions
+See all 12 posts →
+SSMS
+SQL Management Studio + Windows Authentication + Different Domain
+Not directly related to development, just something that has been there for a long time and I just recently found out. I had been finding my self more often than I'd like remote
+
+Thiago Passos THIAGO PASSOS
+INTERVIEW
+NDC Sydney 2017 - My Highlights
+If you are a developer, specially a .NET developer, and you've never been to an NDC Conference, I highly recommend you to put it in your wishlist. It's the best tech conference I've
+
+Thiago Passos THIAGO PASSOS
+Thiago Passos icon
+Thiago Passos
+—
+Build and Deploy an Angular App from GitHub to Azure Website
+Share this
+
+Thiago Passos © 2018
+Latest Posts
+Ghost
