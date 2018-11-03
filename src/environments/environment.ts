@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
 
-  API_BASE : "http://firebootcamp-crm-api.azurewebsites.net/api"
+  API_BASE : "https://firebootcamp-crm-api.azurewebsites.net/api"
 };
 
 
