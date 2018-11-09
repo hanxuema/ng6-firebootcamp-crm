@@ -9,13 +9,15 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { HttpClientModule } from "@angular/common/http";
 import { CompanyTableComponent } from "./company/company-table/company-table.component";
 import { CompanyEditComponent } from "./company/company-edit/company-edit.component";
+import { TaskListComponent } from './task/task-list/task-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CompanyListComponent,
     CompanyTableComponent,
-    CompanyEditComponent
+    CompanyEditComponent,
+    TaskListComponent
   ],
   imports: [
     BrowserModule,
