@@ -10,6 +10,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { CompanyTableComponent } from "./company/company-table/company-table.component";
 import { CompanyEditComponent } from "./company/company-edit/company-edit.component";
 import { TaskListComponent } from './task/task-list/task-list.component';
+import { TaskTableComponent } from './task/task-table/task-table.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { TaskListComponent } from './task/task-list/task-list.component';
     CompanyListComponent,
     CompanyTableComponent,
     CompanyEditComponent,
-    TaskListComponent
+    TaskListComponent,
+    TaskTableComponent
   ],
   imports: [
     BrowserModule,

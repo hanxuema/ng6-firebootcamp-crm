@@ -1,29 +1,46 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import {TaskService} from '../task.service';
-import { Observable } from 'rxjs';
-import { Task } from '../task';
+import { Component, OnInit } from "@angular/core";
+import { Task } from "../task";
+import { TaskService } from "../task.service";
+import { pipe, Subscription, Observable } from "rxjs";
+import { tap, finalize } from "rxjs/operators";
 
 @Component({
-  selector: 'fbc-task-list',
-  templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.scss']
+  selector: "fbc-task-list",
+  templateUrl: "./task-list.component.html",
+  styleUrls: ["./task-list.component.scss"]
 })
+
+// , OnAfterViewInit another module
 export class TaskListComponent implements OnInit {
   tasks$: Observable<Task[]>;
 
-  constructor(
-    private taskService:  TaskService,
-    private router: Router,
-    private activeRouter: ActivatedRoute
-    ) {
-
-   }
-
-  ngOnInit() {
-    //getting all ther tasks
-    //for the company, for the team, or for the person
-    this.tasks$ = this.taskService.getTasks(entityid);
+  // same as 3 lines above, just a nice shortcut
+  constructor(private taskService: TaskService) {
+    // fire first and then ngOnInit
   }
 
+  ngOnInit() {
+    // best place to setup things
+    this.tasks$ = this.taskService.getTasks();
+  }
+
+  loadCompanies() {
+    this.tasks$ = this.taskService
+      .getTasks()
+      .pipe(
+        tap(
+          x => console.log("Tap in component", x),
+          finalize(() => console.log("Finalize"))
+        )
+      );
+  }
+
+  deleteTaskInParentComponent(task: Task) {
+    this.taskService.deleteTask(task);
+
+  }
+
+  logSomething(text: string) {
+    console.log(text);
+  }
 }

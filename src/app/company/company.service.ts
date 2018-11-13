@@ -10,7 +10,7 @@ import { environment } from "../../environments/environment";
   providedIn: "root" // new to ng6, this means this provider is in root module
 })
 export class CompanyService {
-  API_BASE = environment.API_BASE; //"http://firebootcamp-crm-api.azurewebsites.net/api";
+  API_BASE = "https://localhost:44339/api";
 
   constructor(private httpClient: HttpClient) {
     this.loadCompanies(); //anyone who call the service,
@@ -19,12 +19,13 @@ export class CompanyService {
 
   loadCompanies() {
     this.httpClient
-      .get<Company[]>(`${this.API_BASE}/company`)
-      .pipe(
-        tap(x => console.log("Tap", x)),
-        catchError(e => this.errorHandler<Company[]>(e))
-      )
+      .get<Company[]>(`${this.API_BASE}/companies`)
+      // .pipe(
+      //   tap(x => console.log("Tap", x)),
+      //   catchError(e => this.errorHandler<Company[]>(e))
+      // )
       .subscribe(c => {
+        console.log(c);
         this.companies$.next(c);
         console.log("State value : ", this.companies$.getValue());
         console.log("State : ", this.companies$);

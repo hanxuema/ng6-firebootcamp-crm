@@ -1,0 +1,27 @@
+<h1>
+  Tasks
+  <button class="btn btn-success float-right" [routerLink]="['/task/edit',0]">Add</button>
+</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- companies$ is the observable and need to use async -->
+    <tr *ngFor="let task of tasks">
+      <td>{{task.name}}</td>
+      <td>{{task.startDate}}</td>
+      <td>{{task.endDate}}</td>
+      <td class="button-cell">
+        <button type="button" class="btn btn-info" [routerLink]="['/task/edit',task.id]">Edit</button>
+        <!-- <button type="button" class="btn btn-danger" (click)='deleteCompanyInChildComponent(company)'>Delete</button> -->
+      </td>
+    </tr>
+  </tbody>
+</table>
