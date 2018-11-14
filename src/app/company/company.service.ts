@@ -10,7 +10,7 @@ import { environment } from "../../environments/environment";
   providedIn: "root" // new to ng6, this means this provider is in root module
 })
 export class CompanyService {
-  API_BASE = "https://localhost:44339/api";
+  API_BASE = environment.API_BASE;
 
   constructor(private httpClient: HttpClient) {
     this.loadCompanies(); //anyone who call the service,
